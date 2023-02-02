@@ -1,2 +1,3 @@
 ---
 # defaults file for dnsmasq
+domain: "polar.grp"

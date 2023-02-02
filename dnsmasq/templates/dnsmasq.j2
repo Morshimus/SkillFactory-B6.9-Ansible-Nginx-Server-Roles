@@ -1,0 +1,18 @@
+# line 19: uncomment
+# never forward addresses in the non-routed address spaces
+domain-needed
+# line 21: uncomment
+# query with each server strictly in the order in resolv.conf
+bogus-priv
+# line 53: uncomment
+# query with each server strictly in the order in [resolv.conf]
+strict-order
+# line 67: add if you need
+# query the specific domain name to the specific DNS server
+# example below means query [server.education] domain to [10.0.0.10] server
+server=/server.education/10.0.0.10
+# line 135: uncomment
+# add domain name automatically to hostnames
+expand-hosts
+# line : add your own domain name
+domain={{ domain }}

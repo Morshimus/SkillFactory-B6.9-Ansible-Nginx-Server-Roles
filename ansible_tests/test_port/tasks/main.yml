@@ -1,0 +1,15 @@
+---
+# tasks file for test_port
+- name: test_port
+  wait_for:
+	host: "localhost"
+	port: "80"
+	state: started          # Port should be open
+	delay: 0                # No wait before first check (sec)
+	timeout: 3
+  register: output
+ 
+- name: check result
+  assert:
+	that:
+         - "{{ output.failed }} == false"

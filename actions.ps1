@@ -73,6 +73,30 @@ function ansibleVault {
 
 
 
+Set-Alias ansible-galaxy ansibleGalaxy
+function ansibleGalaxy {
+    param (
+        [Parameter(Mandatory=$False)]
+        [string]$distr = "Ubuntu-20.04",
+        [Parameter(Mandatory=$False)]
+        [String]$user = "morsh92",
+        [Parameter(Mandatory=$False,Position=0)]
+        [String]$type = 'role',
+        [Parameter(Mandatory=$False,Position=0)]
+        [String]$action = 'init',
+        [Parameter(Mandatory=$False,Position=0)]
+        [String]$roleName = 'sample',
+        [Parameter(Mandatory=$False,Position=0)]
+        [switch]$force
+
+    )
+    
+    if($force){$f = '--force'}
+
+    wsl -d $distr -u $user -e ansible-galaxy $type $action $roleName $f
+} 
+
+
 function molecule {
     param (
         [Parameter(Mandatory=$False)]

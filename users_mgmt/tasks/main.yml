@@ -1,0 +1,36 @@
+---
+# tasks file for users_mgmt
+  - name: Setup all users
+    user:
+      name: "{{ item.username }}"
+      state: "{{ item.state | default('present') }}"
+      shell: "{{ item.shell | default('/bin/bash') }}"
+      group: "{{ admin_group }}"
+      remove: yes
+    when: item.username is defined
+    with_items:
+      - "{{ server_admin_list }}"
+  
+  - name: Add SSH-keys to users
+    authorized_key:
+      user: "{{ item.0.username }}"
+      key: "{{ item.1 }}"
+    with_subelements:
+      - "{{ server_admin_list }}"
+      - keys.active
+      - flags:
+        skip_missing: True
+    when: item.0.state != "absent"
+
+
+  - name: Remove old SSH-keys from users
+    authorized_key:
+      user: "{{ item.0.username }}"
+      key: "{{ item.1 }}"
+      state: absent
+    with_subelements:
+      - "{{ server_admin_list }}"
+      - keys.disabled
+      - flags:
+        skip_missing: True
+    when: item.0.state != "absent"
