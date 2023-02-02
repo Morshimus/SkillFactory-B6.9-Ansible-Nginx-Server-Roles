@@ -2,9 +2,9 @@
 worker_processes 5;
 worker_rlimit_nofile 256000;
 
-error_log /dev/fd/2 error;
+error_log /var/log/nginx/errors_main error;
 
-pid        /tmp/nginx.pid;
+pid        /run/nginx.pid;
 
 events {
     worker_connections 5120;
@@ -20,8 +20,8 @@ http {
                     '$status $body_bytes_sent "$http_referer" '
                     '"$http_user_agent" "$http_x_forwarded_for"';
 
-    access_log /dev/fd/1 main;
-    error_log /dev/fd/2 error;
+    access_log /var/log/nginx/access main;
+    error_log /var/log/nginx/errors error;
 
     client_body_temp_path /tmp/client_body 1 2;
     proxy_temp_path /tmp/proxy 1 2;
@@ -68,5 +68,4 @@ http {
     server_tokens                   off;
 
     include /etc/nginx/http.d/*.conf;
-    include /etc/nginx/https.d/*.conf;
 }

@@ -9,8 +9,8 @@ server {
     
     root $webroot;
 
-    location ~ .php$ {
-        fastcgi_pass   unix:/tmp/php-fpm.sock;
+    location ~ \.php$ {
+        fastcgi_pass   unix:/var/run/php-fpm/www.sock;
         fastcgi_index  index.php;
 
         fastcgi_param  SCRIPT_FILENAME  $webroot$fastcgi_script_name;

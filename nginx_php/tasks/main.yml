@@ -32,7 +32,7 @@
    file:
     path: /etc/nginx/http.d
     state: directory
-    mode: '0755'  
+    mode: '0600'   
    when: not stat_root_result.stat.exists
 
  - name: Configure nginx main conf from template
@@ -40,7 +40,7 @@
       src: nginx.j2
       dest: /etc/nginx/nginx.conf
       backup: yes
-      mode: '0755'
+      mode: '0600'
 
 
  - name: Configure nginx main conf from template

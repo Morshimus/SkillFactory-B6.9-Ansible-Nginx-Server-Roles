@@ -149,7 +149,7 @@ function molecule {
     
 
     if($verify){
-    mkdir -p $path/molecule/$role/roles
+    if(!(Test-Path $path/molecule/$role/roles)){mkdir -p $path/molecule/$role/roles}
 
     Copy-Item -Recurse -Force $path/ansible_tests/* $path/molecule/$role/roles
     

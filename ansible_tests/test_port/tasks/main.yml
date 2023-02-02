@@ -9,6 +9,10 @@
 	timeout: 3
   register: output
  
+- name : test nginx
+  command: /sbin/nginx -t
+	become: yes
+	 
 - name: check result
   assert:
 	that:
