@@ -1,0 +1,36 @@
+server {
+    listen {{ port }};
+    listen [::]:{{ port }};
+
+    server_name     {{ server_name }};
+    index           index.php;
+
+    set $webroot '{{ webroot }}';
+    
+    root $webroot;
+
+    location ~ .php$ {
+        fastcgi_pass   unix:/tmp/php-fpm.sock;
+        fastcgi_index  index.php;
+
+        fastcgi_param  SCRIPT_FILENAME  $webroot$fastcgi_script_name;
+
+        include fastcgi_params;
+        fastcgi_param  QUERY_STRING     $query_string;
+        fastcgi_param  REQUEST_METHOD   $request_method;
+        fastcgi_param  CONTENT_TYPE     $content_type;
+        fastcgi_param  CONTENT_LENGTH   $content_length;
+        fastcgi_intercept_errors        on;
+        fastcgi_ignore_client_abort     off;
+        fastcgi_connect_timeout 60;
+        fastcgi_send_timeout 180;
+        fastcgi_read_timeout 601;
+        fastcgi_buffer_size 128k;
+        fastcgi_buffers 4 256k;
+        fastcgi_busy_buffers_size 256k;
+        fastcgi_temp_file_write_size 256k;
+    }
+}
+
+
+

@@ -103,19 +103,28 @@ function molecule {
         [string]$role = "nginx",
         [Parameter(Mandatory=$False)]
         [String]$org = "morsh92",
-        [switch]$verify
+        [switch]$verify,
+        [switch]$wipe
 
     )
     
     $path = (Get-Location).path -replace "\\", "/"
 
+
+    docker inspect molecule-$role | Out-Null; if($?){
+        write-host -f Magenta "Container for such role already exist.To purge use -wipe."
+    }else{
+
     docker run -d --name=molecule-$role `
     -v  $path/molecule:/opt/molecule `
     --privileged `
     morsh92/molecule:dind
+    }
     
-    docker exec -ti molecule-$role  /bin/sh -c  "molecule init role $org.$role -d docker"
 
+    if(Test-Path -Path $path/molecule/$role) {write-host -f magenta "This role already exist in molecule"}else{
+    docker exec -ti molecule-$role  /bin/sh -c  "molecule init role $org.$role -d docker"
+    }
     Copy-Item -Recurse -Force  $path/$role/tasks/* $path/molecule/$role/tasks
 
     Copy-Item -Recurse -Force  $path/$role/handlers/* $path/molecule/$role/handlers
@@ -129,11 +138,15 @@ function molecule {
     Copy-Item -Recurse -Force  $path/$role/vars/* $path/molecule/$role/vars
 
     Copy-Item -Recurse -Force  $path/$role/defaults/* $path/molecule/$role/defaults
-
     
-    docker exec -ti molecule-$role  /bin/sh -c  "cd ./$role && molecule create"
 
+    docker inspect molecule-$role | Out-Null; if($?){
     docker exec -ti molecule-$role  /bin/sh -c  "cd ./$role && molecule converge"
+    }else{
+    docker exec -ti molecule-$role  /bin/sh -c  "cd ./$role && molecule create"
+    docker exec -ti molecule-$role  /bin/sh -c  "cd ./$role && molecule converge"
+    }
+    
 
     if($verify){
     mkdir -p $path/molecule/$role/roles
@@ -144,7 +157,8 @@ function molecule {
      
     }
 
+    if($wipe){
     docker rm molecule-$role -f
-
     Remove-Item -Recurse -Force $path/molecule/$role
+    }
 } 

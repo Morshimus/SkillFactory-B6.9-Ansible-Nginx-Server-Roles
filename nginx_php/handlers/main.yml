@@ -1,2 +1,8 @@
 ---
 # handlers file for nginx_php
+   - name: restart nginx service
+     listen: restart_nginx
+     service:
+        name: nginx
+        state: restarted
+     when: molecule_yml is not defined

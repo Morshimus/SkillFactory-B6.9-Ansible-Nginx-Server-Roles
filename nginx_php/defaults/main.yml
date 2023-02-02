@@ -1,2 +1,6 @@
 ---
 # defaults file for nginx_php
+webroot: "/opt/nginx/ansible"
+port: "8080"
+server_name: "morsh_nginx"
+

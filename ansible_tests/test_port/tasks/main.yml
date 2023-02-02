@@ -3,7 +3,7 @@
 - name: test_port
   wait_for:
 	host: "localhost"
-	port: "80"
+	port: "8080"
 	state: started          # Port should be open
 	delay: 0                # No wait before first check (sec)
 	timeout: 3

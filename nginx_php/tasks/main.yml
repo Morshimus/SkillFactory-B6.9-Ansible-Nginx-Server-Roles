@@ -1,2 +1,59 @@
 ---
 # tasks file for nginx_php
+ - name: Install nginx and php packages 
+   yum:
+     name: 
+      - "nginx"
+      - "php-fpm"
+     state: latest
+
+
+
+ - name: Nginx root additional dir create
+   file:
+    path: /opt/nginx/ansible
+    state: directory
+    mode: '0755'  
+
+ - name: Configure index.php main page template
+   template:
+      src: index.php.j2
+      dest: /opt/nginx/ansible/index.php
+      backup: yes
+      mode: '0755'
+   notify: restart_nginx
+
+ - name: Nginx additional config dir exist     
+   stat:
+      path: /etc/nginx/https.d
+   register: stat_root_result    
+     
+ - name: Nginx additional dir create
+   file:
+    path: /etc/nginx/http.d
+    state: directory
+    mode: '0755'  
+   when: not stat_root_result.stat.exists
+
+ - name: Configure nginx main conf from template
+   template:
+      src: nginx.j2
+      dest: /etc/nginx/nginx.conf
+      backup: yes
+      mode: '0755'
+
+
+ - name: Configure nginx main conf from template
+   template:
+      src: nginx_http.j2
+      dest: /etc/nginx/http.d/nginx.conf
+      backup: yes
+      mode: '0755'
+   notify: restart_nginx
+
+
+
+
+   
+
+
