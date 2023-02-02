@@ -12,6 +12,7 @@
      name: "dnsmasq"
      state: started
      enabled: yes
+   when: molecule_yml is not defined
 
 
  - name: Configure dnsmasq
@@ -20,7 +21,8 @@
      dest: /etc/dnsmasq.conf
      backup: true
      mode: '0600'
-#   notify: restart_dnsmasq
+   notify: restart_dnsmasq
+
 
 
 
