@@ -128,6 +128,9 @@ function molecule {
 
     Copy-Item -Recurse -Force  $path/$role/vars/* $path/molecule/$role/vars
 
+    Copy-Item -Recurse -Force  $path/$role/defaults/* $path/molecule/$role/defaults
+
+    
     docker exec -ti molecule-$role  /bin/sh -c  "cd ./$role && molecule create"
 
     docker exec -ti molecule-$role  /bin/sh -c  "cd ./$role && molecule converge"
