@@ -17,10 +17,10 @@
  - name: Configure dnsmasq
    template:
      src: dnsmasq.j2   
-     dest: /etc/dnsmasq/dnsmasq.conf
+     dest: /etc/dnsmasq.conf
      backup: true
      mode: '0600'
-   notify: restart_dnsmasq
+#   notify: restart_dnsmasq
 
 
 
